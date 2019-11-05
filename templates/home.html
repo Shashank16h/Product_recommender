@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>E-Store</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <style>
+        .glyphicon-star {
+            font-size: 20px;
+            color: #FD4;
+        }
+        
+        .glyphicon-star.half {
+            position: relative;
+        }
+        
+        .glyphicon-star.half:before {
+            position: relative;
+            z-index: 9;
+            width: 47%;
+            display: block;
+            overflow: hidden;
+        }
+        
+        .glyphicon-star.half:after {
+            content: '\e006';
+            position: absolute;
+            z-index: 8;
+            color: #bdc3c7;
+            top: 0;
+            left: 0;
+        }
+        
+        .glyphicon-star.empty {
+            position: relative;
+        }
+        
+        .glyphicon-star.empty:after {
+            content: '\e006';
+            position: absolute;
+            z-index: 8;
+            color: #bdc3c7;
+            top: 0;
+            left: 0;
+        }
+    </style>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+        <h3>E-Store</h3>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if p=='h' %}active{% endif %}">
+                    <a class="nav-link" href="{{url_for('home')}}">Home</a>
+                </li>
+                <li class="nav-item {% if p=='o' %}active{% endif %}">
+                    <a class="nav-link" href="{{url_for('orders')}}">Orders</a>
+                </li>
+            </ul>
+            <p><b>Welcome {{uname}}&nbsp&nbsp</b>  </p>
+            <form class="form-inline my-2 my-lg-0" action="{{url_for('search')}}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <p>&nbsp&nbsp</p>
+            <a href="{{url_for('login')}}" class="btn btn-danger" role="button" aria-pressed="true">LogOut</a>
+        </div>
+    </nav>
+<div>
+	<h1 class="display-4"><b>&nbsp&nbsp{% if p=='h' %}Recommendations{% elif p=='o' %}Your Orders{% else %}Search Results{% endif %}</b></h1><br/><br/>
+    {% for p in prods %}
+    <a href="https://www.amazon.com/dp/{{p[0]}}">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-3"><img class="img-responsive" src="{{p[3]}}" alt="prodimg" style="height:250px"></div>
+                <div class="col-sm-6">
+                    <div class="col-md-12">
+                        <h4>{{p[1]}}</h4>
+                        <!--span class="label label-primary">Vintage</span-->
+                        <span class="monospaced">No.{{p[0]}}</span></div>
+                    <div title="{{p[4]}} out of 5 stars">&nbsp&nbsp&nbsp&nbsp
+                        {% for j in range(0,(p[4]|int)) %}
+                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {% endfor %} {% if (p[4]-(p[4]|int))
+                        <0.25 and (p[4]-(p[4]|int))>0 %}
+                            <span class="glyphicon glyphicon-star empty" aria-hidden="true"></span> {% endif %} {% if (p[4]-(p[4]|int))>=0.25 and (p[4]-(p[4]|int))
+                            <0.75 %} <span class="glyphicon glyphicon-star half" aria-hidden="true">
+                                </span>
+                                {% endif %} {% if (p[4]-(p[4]|int))>=0.75 %}
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {% endif %} {% for j in range((p[4]|int)+1,5) %}
+                                <span class="glyphicon glyphicon-star empty" aria-hidden="true"></span> {% endfor %}
+                    </div>
+                    <div class="col-md-12 bottom-rule">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+    <hr style="margin:20px 0px 20px 0p; padding:0px; border:0;border-bottom:1px solid #3f10e783;" /> {% endfor %}
+
+    <div id='ftr'></div>
+</div>
+    <script>
+        $("#ftr").load("/footer");
+    </script>
+
+</body>
+
+</html>
